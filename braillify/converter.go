@@ -3,6 +3,7 @@ package braillify
 
 import (
 	"image"
+	"math"
 	"strings"
 )
 
@@ -11,20 +12,18 @@ import (
 // Braille characters are 2x4, so a 200x100 image would be converted into 100x25 braille characters.
 // threshold is a value between 0 and 1 representing the level of brightness needed to display a dot
 func ImgToBraille(img image.Image, threshold float64) string {
-	if threshold > 1 {
-		threshold = 1
-	}
-	if threshold < 0 {
-		threshold = 0
-	}
+	// Clamp the possible threshold values
+	threshold = math.Max(threshold, 0)
+	threshold = math.Min(threshold, 1)
 	var extra int
+	// Add an extra row if the height of the image is not exactly divisible by 4
 	if img.Bounds().Dy()%4 != 0 {
 		extra = 1
 	}
 	imageWidth := img.Bounds().Dx()
 	imageHeight := img.Bounds().Dy()
-	brailleWidth := int(imageWidth / 2)
-	brailleHeight := int(extra + imageHeight/4)
+	brailleWidth := int(imageWidth/2) + imageWidth%2
+	brailleHeight := int(imageHeight/4) + extra
 	brailleArray := make([]uint8, brailleWidth*brailleHeight)
 
 	for i := 0; i < imageWidth; i++ {
