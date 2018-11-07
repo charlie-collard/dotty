@@ -38,10 +38,13 @@ func ImgToBraille(img image.Image, threshold float64) string {
 	}
 	var b strings.Builder
 	for i, c := range brailleArray {
-		b.WriteRune(brailleMap[c])
 		if (i%brailleWidth) == 0 && i != 0 {
 			b.WriteRune('\n')
 		}
+		if c == 0 {
+			c = 0x80
+		}
+		b.WriteRune(brailleMap[c])
 	}
 	return b.String()
 }
