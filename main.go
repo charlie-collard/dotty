@@ -11,7 +11,9 @@ import (
 	_ "image/gif"
 	_ "image/jpeg"
 	_ "image/png"
+	"io"
 	"log"
+	"net/http"
 	"os"
 	"strconv"
 	"strings"
@@ -32,6 +34,31 @@ func init() {
 	flag.BoolVar(invert, "i", false, "Invert the image")
 	flag.Float64Var(threshold, "t", defaultThreshold, "Level between 0 and 1 at which a pixel is considered bright enough to be a dot")
 	flag.BoolVar(choose, "c", false, "Interactively choose a threshold to use")
+}
+
+func loadImage(filename string) (image.Image, error) {
+	var imageStream io.ReadCloser
+	// Fetch from the internet if the filename is a URL
+	if strings.HasPrefix(filename, "http://") || strings.HasPrefix(filename, "https://") {
+		response, err := http.Get(filename)
+		if err != nil {
+			return nil, err
+		}
+		imageStream = response.Body
+	} else {
+		var err error
+		imageStream, err = os.Open(filename)
+		if err != nil {
+			return nil, err
+		}
+	}
+	defer imageStream.Close()
+
+	img, _, err := image.Decode(imageStream)
+	if err != nil {
+		return nil, err
+	}
+	return img, nil
 }
 
 func main() {
@@ -55,17 +82,10 @@ func main() {
 	*width = *width * 2
 	*height = *height * 4
 
-	f, err := os.Open(flag.Arg(0))
+	img, err := loadImage(flag.Arg(0))
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer f.Close()
-
-	img, _, err := image.Decode(f)
-	if err != nil {
-		log.Fatal(err)
-	}
-
 	resized := imaging.Resize(imaging.Grayscale(img), *width, *height, imaging.Lanczos)
 	if *invert {
 		resized = imaging.Invert(resized)
