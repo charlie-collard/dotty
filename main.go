@@ -13,6 +13,7 @@ import (
 	_ "image/png"
 	"io"
 	"log"
+	"math"
 	"net/http"
 	"os"
 	"strconv"
@@ -96,6 +97,8 @@ func main() {
 		reader := bufio.NewReader(os.Stdin)
 	loop:
 		for {
+			currentThreshold = math.Max(currentThreshold, 0)
+			currentThreshold = math.Min(currentThreshold, 1)
 			fmt.Printf("[current threshold %.02f]\n", currentThreshold)
 			fmt.Print("(u) up (U) 10x up (d) down (D) 10x down (s <val>) set (x) done: ")
 			s, err := reader.ReadString('\n')
