@@ -30,7 +30,7 @@ func ImgToBraille(img image.Image, threshold float64) string {
 		for j := 0; j < imageHeight; j++ {
 			r, g, b, _ := img.At(i, j).RGBA()
 			grayscale := (r + g + b) / 3
-			if grayscale >= uint32(threshold*0xffff) {
+			if grayscale > uint32(threshold*0xffff) {
 				brailleArray[int(i/2)+int(j/4)*brailleWidth] |= 1 << uint8((i&1)*4+(j&3))
 			}
 		}
