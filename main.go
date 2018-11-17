@@ -74,7 +74,7 @@ func main() {
 		log.Fatal(errors.New("dotty: invalid threshold value"))
 	}
 	if flag.NArg() == 0 {
-		log.Fatal(errors.New("dotty: missing filename for image"))
+		log.Fatal(errors.New("dotty: missing filename or URL for image"))
 	}
 	if *width == 0 && *height == 0 {
 		*width = defaultWidth
