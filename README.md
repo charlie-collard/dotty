@@ -1,5 +1,5 @@
 # Dotty
-Converts images to braille text
+Renders any image into command-line readable dots, using braille codepoints
 
 ## Features
 * Use local files or HTTP(S) URLs
