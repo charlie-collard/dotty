@@ -8,7 +8,7 @@ Renders any image into command-line readable dots, using braille codepoints
 * Allows choice of `-width` and `-height` of output text
 
 ## Installation
-`go get github.com/bspammer/dotty && go install github.com/bspammer/dotty`
+`go get github.com/charlie-collard/dotty && go install github.com/charlie-collard/dotty`
 
 ## Examples
 
