@@ -5,7 +5,7 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	"github.com/bspammer/dotty/braillify"
+	"github.com/charlie-collard/dotty/braillify"
 	"github.com/disintegration/imaging"
 	"image"
 	_ "image/gif"
